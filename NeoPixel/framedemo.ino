@@ -20,7 +20,7 @@ uint32_t BLU = strip.Color(  0,   0, 255);     // Blue
 uint32_t WHI = strip.Color(127, 127, 127); // White
 
 // Remember to change the dimensions below in the loops if you add more rows/frames.
-//                   Pixel:     1    2    3    4    5    6    7    8    9    10   11   12   13   14   15   16 
+//                       Pixel:     1    2    3    4    5    6    7    8    9    10   11   12   13   14   15   16 
 uint32_t pattern[10][N_LEDS] = { { WHI, OFF, OFF, WHI, OFF, OFF, WHI, OFF, OFF, GRE, OFF, OFF, GRE, OFF, OFF, GRE },
                                  { OFF, OFF, WHI, OFF, WHI, OFF, OFF, WHI, GRE, OFF, OFF, GRE, OFF, OFF, GRE, OFF },
                                  { OFF, WHI, OFF, OFF, OFF, OFF, WHI, OFF, OFF, OFF, GRE, OFF, OFF, GRE, OFF, OFF },
