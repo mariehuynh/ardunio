@@ -2,7 +2,7 @@
 Marie Huynh
 June 22, 2014
 
-This is a frame-based blinky test of NeoPixels driven by an Arduino.  It compiles to 3,786 bytes, so should fit on Trinkets now.
+This is a frame-based blinky test of NeoPixels driven by an Arduino.  It compiles to 3,420 bytes, so should fit on Trinkets now.
 
 TODO: Do I need to manually pull strip.Color() out of the loop or will the compiler do that for me because the return value never changes?
 */
