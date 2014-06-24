@@ -2,7 +2,7 @@
 Marie Huynh
 June 22, 2014
 
-This is a frame-based blinky test of NeoPixels driven by an Arduino.  It compiles to 3,420 bytes, so should fit on Trinkets now.
+This is a frame-based blinky test of NeoPixels driven by an Arduino.  It compiles to 3,808 bytes, so should fit on Trinkets now.
 
 TODO: Do I need to manually pull strip.Color() out of the loop or will the compiler do that for me because the return value never changes?
 */
@@ -16,7 +16,7 @@ Adafruit_NeoPixel strip = Adafruit_NeoPixel(N_LEDS, PIN, NEO_GRB + NEO_KHZ800);
 
 // New colors may be added, but need their RGB values defined in the switch below.
 // Adhering to three letters is not necessary, but you'll have to fix the spacing and this is already wide.
-typedef enum Colors{
+enum Colors{
   OFF,
   RED,
   GRE,
@@ -33,31 +33,31 @@ typedef enum Colors{
 // Each row is a frame.  New rows may be added.
 // This takes up much less space than the uint32_t that strip.Color() returns.
 //                    Pixel:     1    2    3    4    5    6    7    8    9    10   11   12   13   14   15   16
-uint8_t pattern[][N_LEDS] = { { WHI, OFF, OFF, WHI, OFF, OFF, GRE, OFF, OFF, RED, OFF, TEL, OFF, OFF, OFF, OFF },
-                              { WHI, OFF, WHI, OFF, WHI, OFF, GRE, OFF, GRE, OFF, OFF, TEL, TEL, OFF, OFF, TEL },
-                              { WH3, BLU, OFF, OFF, OFF, OFF, GRE, OFF, OFF, YEL, GRE, TEL, TEL, TEL, OFF, OFF },
-                              { WH2, OFF, WHI, OFF, WHI, OFF, GRE, OFF, OFF, OFF, OFF, TEL, TEL, TEL, TL5, TEL },
-                              { WH1, OFF, WHI, OFF, OFF, WHI, OFF, RED, BLU, OFF, OFF, TL5, TL5, TL5, OFF, OFF },
-                              { OFF, BLU, OFF, WHI, OFF, OFF, OFF, RED, OFF, OFF, BLU, TEL, OFF, OFF, OFF, OFF },
-                              { OFF, OFF, OFF, OFF, OFF, OFF, OFF, RED, OFF, GRE, OFF, TEL, TEL, OFF, OFF, TEL },
-                              { OFF, OFF, OFF, WHI, OFF, WHI, OFF, RED, RED, OFF, OFF, TL5, TL5, OFF, OFF, OFF },
-                              { WH1, OFF, WHI, OFF, WHI, OFF, GRE, OFF, GRE, OFF, OFF, TEL, TEL, OFF, OFF, OFF },
-                              { WH2, BLU, OFF, WHI, OFF, OFF, GRE, OFF, OFF, OFF, RED, TEL, OFF, OFF, OFF, OFF },
-                              { WH3, OFF, OFF, OFF, OFF, OFF, GRE, OFF, BLU, RED, OFF, TEL, TEL, OFF, OFF, TEL },
-                              { WHI, OFF, OFF, OFF, WHI, OFF, GRE, OFF, OFF, OFF, OFF, TEL, TEL, TEL, OFF, OFF },
-                              { WHI, BLU, OFF, WHI, OFF, OFF, OFF, RED, OFF, OFF, YEL, TEL, TEL, TL5, OFF, TEL },
-                              { WHI, OFF, OFF, OFF, OFF, OFF, OFF, RED, OFF, GRE, OFF, TL5, OFF, OFF, OFF, OFF },
-                              { WH3, BLU, OFF, WHI, WHI, OFF, OFF, RED, RED, OFF, OFF, TEL, TEL, OFF, OFF, TEL },
-                              { WH2, OFF, WHI, OFF, OFF, WHI, OFF, RED, OFF, BLU, GRE, TEL, TEL, TEL, TEL, TEL },
-                              { WH1, BLU, OFF, WHI, OFF, OFF, GRE, OFF, OFF, OFF, OFF, TEL, TEL, TL5, TL5, OFF },
-                              { OFF, OFF, OFF, OFF, OFF, OFF, GRE, OFF, OFF, BLU, GRE, TEL, TEL, TEL, OFF, OFF },
-                              { OFF, OFF, WHI, OFF, WHI, OFF, GRE, OFF, GRE, OFF, OFF, TEL, TEL, TEL, TEL, TEL },
-                              { OFF, BLU, OFF, WHI, OFF, OFF, GRE, OFF, OFF, OFF, RED, TEL, TEL, TL5, TL5, OFF },
-                              { WH1, OFF, OFF, OFF, OFF, OFF, OFF, RED, OFF, GRE, OFF, TEL, TL5, OFF, OFF, TEL },
-                              { WH2, OFF, OFF, OFF, OFF, WHI, OFF, RED, BLU, OFF, OFF, TL5, OFF, OFF, OFF, OFF },
-                              { WH3, OFF, WHI, OFF, WHI, OFF, OFF, RED, OFF, OFF, GRE, TEL, TEL, OFF, OFF, OFF },
-                              { WH1, BLU, OFF, OFF, OFF, WHI, OFF, RED, OFF, RED, OFF, TEL, TL5, OFF, OFF, TEL }
-                            };
+int pattern[][N_LEDS] = { { WHI, OFF, OFF, WHI, OFF, OFF, GRE, OFF, OFF, RED, OFF, TEL, OFF, OFF, OFF, OFF },
+                          { WHI, OFF, WHI, OFF, WHI, OFF, GRE, OFF, GRE, OFF, OFF, TEL, TEL, OFF, OFF, TEL },
+                          { WH3, BLU, OFF, OFF, OFF, OFF, GRE, OFF, OFF, YEL, GRE, TEL, TEL, TEL, OFF, OFF },
+                          { WH2, OFF, WHI, OFF, WHI, OFF, GRE, OFF, OFF, OFF, OFF, TEL, TEL, TEL, TL5, TEL },
+                          { WH1, OFF, WHI, OFF, OFF, WHI, OFF, RED, BLU, OFF, OFF, TL5, TL5, TL5, OFF, OFF },
+                          { OFF, BLU, OFF, WHI, OFF, OFF, OFF, RED, OFF, OFF, BLU, TEL, OFF, OFF, OFF, OFF },
+                          { OFF, OFF, OFF, OFF, OFF, OFF, OFF, RED, OFF, GRE, OFF, TEL, TEL, OFF, OFF, TEL },
+                          { OFF, OFF, OFF, WHI, OFF, WHI, OFF, RED, RED, OFF, OFF, TL5, TL5, OFF, OFF, OFF },
+                          { WH1, OFF, WHI, OFF, WHI, OFF, GRE, OFF, GRE, OFF, OFF, TEL, TEL, OFF, OFF, OFF },
+                          { WH2, BLU, OFF, WHI, OFF, OFF, GRE, OFF, OFF, OFF, RED, TEL, OFF, OFF, OFF, OFF },
+                          { WH3, OFF, OFF, OFF, OFF, OFF, GRE, OFF, BLU, RED, OFF, TEL, TEL, OFF, OFF, TEL },
+                          { WHI, OFF, OFF, OFF, WHI, OFF, GRE, OFF, OFF, OFF, OFF, TEL, TEL, TEL, OFF, OFF },
+                          { WHI, BLU, OFF, WHI, OFF, OFF, OFF, RED, OFF, OFF, YEL, TEL, TEL, TL5, OFF, TEL },
+                          { WHI, OFF, OFF, OFF, OFF, OFF, OFF, RED, OFF, GRE, OFF, TL5, OFF, OFF, OFF, OFF },
+                          { WH3, BLU, OFF, WHI, WHI, OFF, OFF, RED, RED, OFF, OFF, TEL, TEL, OFF, OFF, TEL },
+                          { WH2, OFF, WHI, OFF, OFF, WHI, OFF, RED, OFF, BLU, GRE, TEL, TEL, TEL, TEL, TEL },
+                          { WH1, BLU, OFF, WHI, OFF, OFF, GRE, OFF, OFF, OFF, OFF, TEL, TEL, TL5, TL5, OFF },
+                          { OFF, OFF, OFF, OFF, OFF, OFF, GRE, OFF, OFF, BLU, GRE, TEL, TEL, TEL, OFF, OFF },
+                          { OFF, OFF, WHI, OFF, WHI, OFF, GRE, OFF, GRE, OFF, OFF, TEL, TEL, TEL, TEL, TEL },
+                          { OFF, BLU, OFF, WHI, OFF, OFF, GRE, OFF, OFF, OFF, RED, TEL, TEL, TL5, TL5, OFF },
+                          { WH1, OFF, OFF, OFF, OFF, OFF, OFF, RED, OFF, GRE, OFF, TEL, TL5, OFF, OFF, TEL },
+                          { WH2, OFF, OFF, OFF, OFF, WHI, OFF, RED, BLU, OFF, OFF, TL5, OFF, OFF, OFF, OFF },
+                          { WH3, OFF, WHI, OFF, WHI, OFF, OFF, RED, OFF, OFF, GRE, TEL, TEL, OFF, OFF, OFF },
+                          { WH1, BLU, OFF, OFF, OFF, WHI, OFF, RED, OFF, RED, OFF, TEL, TL5, OFF, OFF, TEL }
+                        };
 
 void setup() {
   strip.begin();
@@ -73,12 +73,12 @@ void loop() {
   blinky(50);
 }
 
-void blinky(uint8_t wait) {
-  uint32_t color;
+void blinky(int wait) {
+  int color;
   // Go through each of the frames
-  for(uint16_t frame = 0; frame < (sizeof(pattern)/sizeof(*pattern)); frame++) {
+  for(int frame = 0; frame < (sizeof(pattern)/sizeof(*pattern)); frame++) {
     // Set each pixel in the frame
-    for(uint16_t i=0; i < strip.numPixels(); i++) {
+    for(int i=0; i < strip.numPixels(); i++) {
       switch(pattern[frame][i]){
         case OFF:
           color = 0;
