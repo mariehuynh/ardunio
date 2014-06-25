@@ -32,7 +32,7 @@ enum Colors{
 
 // Each row is a frame.  New rows may be added.
 // This takes up much less space than the uint32_t that strip.Color() returns.
-//                    Pixel:     1    2    3    4    5    6    7    8    9    10   11   12   13   14   15   16
+//                Pixel:     1    2    3    4    5    6    7    8    9    10   11   12   13   14   15   16
 int pattern[][N_LEDS] = { { WHI, OFF, OFF, WHI, OFF, OFF, GRE, OFF, OFF, RED, OFF, TEL, OFF, OFF, OFF, OFF },
                           { WHI, OFF, WHI, OFF, WHI, OFF, GRE, OFF, GRE, OFF, OFF, TEL, TEL, OFF, OFF, TEL },
                           { WH3, BLU, OFF, OFF, OFF, OFF, GRE, OFF, OFF, YEL, GRE, TEL, TEL, TEL, OFF, OFF },
