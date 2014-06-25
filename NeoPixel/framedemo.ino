@@ -32,7 +32,6 @@ void setup() {
 
 void loop() {
   // Some example procedures showing how to display to the pixels:
-  blinky(20);
   colorWipe(strip.Color(255, 0, 0), 50); // Red
   colorWipe(strip.Color(0, 255, 0), 50); // Green
   colorWipe(strip.Color(0, 0, 255), 50); // Blue
@@ -44,6 +43,9 @@ void loop() {
   rainbow(20);
   rainbowCycle(20);
   theaterChaseRainbow(50);
+
+  blinky(20);
+
 }
 
 // Fill the dots one after the other with a color
