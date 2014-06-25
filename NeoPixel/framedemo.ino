@@ -73,8 +73,8 @@ void loop() {
   blinky(50);
 }
 
-void blinky(int wait) {
-  int color;
+void blinky(uint8_t wait) {
+  uint32_t color;
   // Go through each of the frames
   for(int frame = 0; frame < (sizeof(pattern)/sizeof(*pattern)); frame++) {
     // Set each pixel in the frame
