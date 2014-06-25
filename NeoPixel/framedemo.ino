@@ -33,9 +33,9 @@ void setup() {
 void loop() {
 
   blinky1(20);
-  blinky2(20);
-  blinky3(20);
-  blinky4(20);
+  //blinky2(20);
+  //blinky3(20);
+  //blinky4(20);
   //blinky5(20);
 
 }
