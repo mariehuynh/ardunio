@@ -63,11 +63,15 @@ void blinky1(uint8_t wait) {
   // Each row is a frame.  New rows may be added.
   // This takes up much less space than the uint32_t that strip.Color() returns.
   //                Pixel:     1    2    3    4    5    6    7    8    9    10   11   12   13   14   15   16
-  int pattern[][16] = { { WHI, OFF, OFF, WHI, OFF, OFF, GRE, OFF, OFF, RED, OFF, TEL, OFF, OFF, OFF, OFF },
-                            { WHI, OFF, WHI, OFF, WHI, OFF, GRE, OFF, GRE, OFF, OFF, TEL, TEL, OFF, OFF, TEL },
-                            { WH3, BLU, OFF, OFF, OFF, OFF, GRE, OFF, OFF, YEL, GRE, TEL, TEL, TEL, OFF, OFF },
-                            { WH2, OFF, WHI, OFF, WHI, OFF, GRE, OFF, OFF, OFF, OFF, TEL, TEL, TEL, TL5, TEL },
-                            { WH1, OFF, WHI, OFF, OFF, WHI, OFF, RED, BLU, OFF, OFF, TL5, TL5, TL5, OFF, OFF }
+  // int pattern[][16] = { { WHI, OFF, OFF, WHI, OFF, OFF, GRE, OFF, OFF, RED, OFF, TEL, OFF, OFF, OFF, OFF },
+  //                           { WHI, OFF, WHI, OFF, WHI, OFF, GRE, OFF, GRE, OFF, OFF, TEL, TEL, OFF, OFF, TEL },
+  //                           { WH3, BLU, OFF, OFF, OFF, OFF, GRE, OFF, OFF, YEL, GRE, TEL, TEL, TEL, OFF, OFF },
+  //                           { WH2, OFF, WHI, OFF, WHI, OFF, GRE, OFF, OFF, OFF, OFF, TEL, TEL, TEL, TL5, TEL },
+  //                           { WH1, OFF, WHI, OFF, OFF, WHI, OFF, RED, BLU, OFF, OFF, TL5, TL5, TL5, OFF, OFF }
+
+  int pattern[][16] = { { RED, RED, RED, RED, RED, RED, RED, RED, RED, RED, RED, RED, RED, RED, RED, RED },
+                            { GRE, GRE, GRE, GRE, GRE, GRE, GRE, GRE, GRE, GRE, GRE, GRE, GRE, GRE, GRE, GRE },
+                            { YEL, YEL, YEL, YEL, YEL, YEL, YEL, YEL, YEL, YEL, YEL, YEL, YEL, YEL, YEL, YEL }
 
                             // { OFF, BLU, OFF, WHI, OFF, OFF, OFF, RED, OFF, OFF, BLU, TEL, OFF, OFF, OFF, OFF },
                             // { OFF, OFF, OFF, OFF, OFF, OFF, OFF, RED, OFF, GRE, OFF, TEL, TEL, OFF, OFF, TEL },
@@ -90,12 +94,12 @@ void blinky1(uint8_t wait) {
                             //{ WH1, BLU, OFF, OFF, OFF, WHI, OFF, RED, OFF, RED, OFF, TEL, TL5, OFF, OFF, TEL }
                           };
 
-  uint32_t color;
+  uint32_t color = 0;
   // Go through each of the frames
-  for(int frame = 0; frame < 5; frame++) {
+  for(int frame = 0; frame < 3; frame++) {
     // Set each pixel in the frame
     for(int i=0; i < strip.numPixels(); i++) {
-      color = strip.Color(255,   0,   0); // default red for debugging
+      //color = strip.Color(255,   0,   0); // default red for debugging
 
       switch(pattern[frame][i]){
         case OFF:
