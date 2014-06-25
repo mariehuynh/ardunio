@@ -35,16 +35,16 @@ void loop() {
   colorWipe(strip.Color(255, 0, 0), 50); // Red
   colorWipe(strip.Color(0, 255, 0), 50); // Green
   colorWipe(strip.Color(0, 0, 255), 50); // Blue
-  // Send a theater pixel chase in...
+/*  // Send a theater pixel chase in...
   theaterChase(strip.Color(127, 127, 127), 50); // White
   theaterChase(strip.Color(127,   0,   0), 50); // Red
   theaterChase(strip.Color(  0,   0, 127), 50); // Blue
 
   rainbow(20);
   rainbowCycle(20);
-  theaterChaseRainbow(50);
+  theaterChaseRainbow(50);*/
 
-  blinky(20);
+  //blinky(20);
 
 }
 
@@ -185,6 +185,8 @@ void blinky(uint8_t wait) {
   for(int frame = 0; frame < 24; frame++) {
     // Set each pixel in the frame
     for(int i=0; i < strip.numPixels(); i++) {
+      color = strip.Color(255,   0,   0); // default red for debugging
+
       switch(pattern[frame][i]){
         case OFF:
           color = 0;
