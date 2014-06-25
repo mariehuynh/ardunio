@@ -180,9 +180,9 @@ void blinky(uint8_t wait) {
 
   uint32_t color;
   // Go through each of the frames
-  for(uint16_t frame = 0; frame < 24; frame++) {
+  for(int frame = 0; frame < 24; frame++) {
     // Set each pixel in the frame
-    for(uint16_t i=0; i < strip.numPixels(); i++) {
+    for(int i=0; i < strip.numPixels(); i++) {
       switch(pattern[frame][i]){
         case OFF:
           color = 0;
