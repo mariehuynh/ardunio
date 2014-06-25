@@ -9,7 +9,7 @@ TODO: Do I need to manually pull strip.Color() out of the loop or will the compi
 
 #include <Adafruit_NeoPixel.h>
 
-#define PIN 6       // Your pin may vary
+#define PIN 0       // Your pin may vary
 #define N_LEDS 16   // Number of LEDs
 
 Adafruit_NeoPixel strip = Adafruit_NeoPixel(N_LEDS, PIN, NEO_GRB + NEO_KHZ800);
