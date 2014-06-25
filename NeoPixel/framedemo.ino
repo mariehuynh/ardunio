@@ -64,21 +64,32 @@ void setup() {
   strip.show(); // Initialize all pixels to 'off'
 
   // Change this to reduce brightness
-  strip.setBrightness(255);
+  //strip.setBrightness(255);
 }
 
 void loop() {
+  colorWipe(strip.Color(255, 0, 0), 50); // Red
+
   blinky(5);
   blinky(10);
   blinky(50);
 }
 
+// Fill the dots one after the other with a color
+void colorWipe(uint32_t c, uint8_t wait) {
+  for(uint16_t i=0; i<strip.numPixels(); i++) {
+      strip.setPixelColor(i, c);
+      strip.show();
+      delay(wait);
+  }
+}
+
 void blinky(uint8_t wait) {
   uint32_t color;
   // Go through each of the frames
-  for(int frame = 0; frame < (sizeof(pattern)/sizeof(*pattern)); frame++) {
+  for(uint16_t frame = 0; frame < (sizeof(pattern)/sizeof(*pattern)); frame++) {
     // Set each pixel in the frame
-    for(int i=0; i < strip.numPixels(); i++) {
+    for(uint16_t i=0; i < strip.numPixels(); i++) {
       switch(pattern[frame][i]){
         case OFF:
           color = 0;
