@@ -1,3 +1,13 @@
+/******************************************************************************
+Marie Huynh
+May 12, 2015
+Twilio Signal Developer Conference for Communications
+
+This short program plays tic-tac-toe with itself on an 8x8 Adafruit Neopixel 
+RGB LED Matrix.  The "AI" really just picks a random free spot until the win
+condition is satisfied or it's a tie.
+******************************************************************************/
+
 #include <Adafruit_NeoPixel.h>
 #include <Adafruit_GFX.h>
 #include <Adafruit_NeoMatrix.h>
@@ -102,6 +112,7 @@ int checkDisplayWin() {
 // Display winning text
 // TODO: add player info/animation
 void displaywin(int winner) {
+  delay(1000);
   String winnertext = "Win!";
   scrollText(winnertext);
 }
@@ -132,7 +143,6 @@ void drawGrid(){
 
 //draw grid
 void play(int x, int y, int player){
-   
   for(int row = x*3; row < (x*3)+2; row++) {
     for(int column = y*3; column < (y*3)+2; column++) {
       if(player < 2) {
@@ -146,17 +156,6 @@ void play(int x, int y, int player){
 
 // Fill the dots one after the other with a color
 void animation(RGB color, uint8_t wait) {
-  for(uint16_t row=0; row < 8; row++) {
-    for(uint16_t column=0; column < 8; column++) {
-      matrix.drawPixel(column, row, matrix.Color(color.r, color.g, color.b));
-      matrix.show();
-      delay(wait);
-    }
-  }
-}
-
-// Fill the dots one after the other with a color
-void colorWipe(RGB color, uint8_t wait) {
   for(uint16_t row=0; row < 8; row++) {
     for(uint16_t column=0; column < 8; column++) {
       matrix.drawPixel(column, row, matrix.Color(color.r, color.g, color.b));
@@ -180,6 +179,7 @@ void fadePixel(int x, int y, RGB startColor, RGB endColor, int steps, int wait) 
   }
 }
 
+// Scroll text to the left
 void scrollText(String textToDisplay) {
   int x = matrix.width();
   int pixelsInText = textToDisplay.length() * 7;
