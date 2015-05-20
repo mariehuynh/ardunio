@@ -25,6 +25,11 @@ void setup() {
   matrix.setBrightness(20);
   matrix.setTextColor( matrix.Color(white.r, white.g, white.b) );
   matrix.setTextWrap(false);
+
+  // Title
+  String ttt = "TicTacToe";
+  scrollText(ttt);
+  delay(500);
 }
 
 int gameboard[3][3] = {
@@ -45,11 +50,6 @@ void loop() {
       gameboard[i][j] = 0;
     }
   }
-  
-  // Title
-  String ttt = "TicTacToe";
-  //scrollText(ttt);
-  //delay(500);
   
   // Print grid
   drawGrid();
