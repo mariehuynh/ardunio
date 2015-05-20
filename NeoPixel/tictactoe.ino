@@ -20,6 +20,13 @@ Adafruit_NeoMatrix matrix = Adafruit_NeoMatrix(8, 8, PIN,
   NEO_MATRIX_ROWS + NEO_MATRIX_PROGRESSIVE,
   NEO_GRB            + NEO_KHZ800);
 
+// Internal representation of the game
+int gameboard[3][3] = {
+  {0,0,0},
+  {0,0,0},
+  {0,0,0}
+};
+
 void setup() {
   matrix.begin();
   matrix.setBrightness(20);
@@ -32,14 +39,8 @@ void setup() {
   delay(500);
 }
 
-int gameboard[3][3] = {
-  {0,0,0},
-  {0,0,0},
-  {0,0,0}
-};
-
 void loop() {
-  // set up blank board
+  // Set up blank board
   for(int i = 0; i < 8; i++){
     for(int j = 0; j < 8; j++){
       fadePixel(i, j, off, off, 30, 0);
@@ -54,10 +55,9 @@ void loop() {
   // Print grid
   drawGrid();
   
-  // Play
+  // Play 9 rounds
   int x,y;
   
-  // play 9 rounds
   for(int i = 0; i < 9; i++){
     // Pick new spot
     do {
@@ -65,11 +65,13 @@ void loop() {
       y = random(0,3);
     } while (gameboard[x][y] != 0);
 
+    // Set internal gameboard state
     gameboard[x][y] = (i%2) + 1;
 
-    play(x,y,(i%2)+1); 
+    // Update display
+    displayMove(x,y,(i%2)+1); 
   
-    // if win, end and display
+    // If win, end and display
     if(checkDisplayWin())
       break;
 
@@ -106,7 +108,7 @@ int checkDisplayWin() {
       displaywin(gameboard[0][0]);
       return 1; 
   }
-  return 0;
+  return 0; // Nope, keep playing
 }
 
 // Display winning text
@@ -141,8 +143,8 @@ void drawGrid(){
   } 
 }
 
-//draw grid
-void play(int x, int y, int player){
+// Display the chosen location
+void displayMove(int x, int y, int player){
   for(int row = x*3; row < (x*3)+2; row++) {
     for(int column = y*3; column < (y*3)+2; column++) {
       if(player < 2) {
