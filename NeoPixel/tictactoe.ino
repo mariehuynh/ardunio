@@ -15,10 +15,6 @@ void setup() {
   matrix.setBrightness(20);
   matrix.setTextColor( matrix.Color(white.r, white.g, white.b) );
   matrix.setTextWrap(false);
-
-    Serial.begin(9600);           // set up Serial library at 9600 bps
-
-  
 }
 
 int gameboard[3][3] = {
@@ -50,7 +46,6 @@ void loop() {
   
   // Play
   int x,y;
-
   
   // play 9 rounds
   for(int i = 0; i < 9; i++){
@@ -61,32 +56,22 @@ void loop() {
     } while (gameboard[x][y] != 0);
 
     gameboard[x][y] = (i%2) + 1;
-    Serial.print("x = ");
-    Serial.println(x);    
-
-    Serial.print("y = ");
-    Serial.println(y);  
 
     play(x,y,(i%2)+1); 
   
     // if win, end and display
-    if(haswin())
+    if(checkDisplayWin())
       break;
 
-      //for(uint16_t column=0; column < 3; column++) {    
-
-    
-
-
     delay(500);
-
   }
 }
 
-int haswin() {
-  int win = 0;
+// Check for satisfaction of win condition
+int checkDisplayWin() {
+  // Check horizontal and verticals
   for(uint16_t i=0; i < 3; i++) {
-    if(gameboard[i][0] > 0 && 
+    if(gameboard[i][0] > 0 &&   //
       gameboard[i][0] == gameboard[i][1] && 
       gameboard[i][0] == gameboard[i][2]) {
         displaywin(gameboard[i][0]);
@@ -96,25 +81,31 @@ int haswin() {
       gameboard[0][i] == gameboard[2][i]) {
         displaywin(gameboard[0][i]);
         return 1; 
-    }else if(gameboard[0][0] > 0 && 
-      gameboard[0][0] == gameboard[1][1] && 
-      gameboard[0][0] == gameboard[2][2]) {
-        displaywin(gameboard[0][0]);
-        return 1; 
-    }else if(gameboard[0][2] > 0 && 
-      gameboard[0][2] == gameboard[1][1] && 
-      gameboard[1][1] == gameboard[2][0]) {
-        displaywin(gameboard[0][0]);
-        return 1; 
     }
+  }
+
+  // Check diagonals
+  if(gameboard[0][0] > 0 &&  
+    gameboard[0][0] == gameboard[1][1] && 
+    gameboard[0][0] == gameboard[2][2]) {
+      displaywin(gameboard[0][0]);
+      return 1; 
+  }else if(gameboard[0][2] > 0 && 
+    gameboard[0][2] == gameboard[1][1] && 
+    gameboard[1][1] == gameboard[2][0]) {
+      displaywin(gameboard[0][0]);
+      return 1; 
   }
   return 0;
 }
 
-void displaywin(int winner){
+// Display winning text
+// TODO: add player info/animation
+void displaywin(int winner) {
   String winnertext = "Win!";
   scrollText(winnertext);
 }
+
 //draw grid
 void drawGrid(){
   // This 8x8 array represents the LED matrix pixels. 
@@ -128,7 +119,6 @@ void drawGrid(){
    {1, 1, 1, 1, 1, 1, 1, 1},
    {0, 0, 1, 0, 0, 1, 0, 0},
    {0, 0, 1, 0, 0, 1, 0, 0}
-
   };
    
   for(int row = 0; row < 8; row++) {
@@ -138,35 +128,21 @@ void drawGrid(){
       }
     }
   } 
-  
 }
 
 //draw grid
 void play(int x, int y, int player){
-    Serial.print("player = ");
-    Serial.println(player);  
    
   for(int row = x*3; row < (x*3)+2; row++) {
     for(int column = y*3; column < (y*3)+2; column++) {
-
-    Serial.print("row = ");
-    Serial.println(row);  
-    Serial.print("col = ");
-    Serial.println(column);  
-
       if(player < 2) {
         fadePixel(column, row, off, teal, 30, 0);
       }else{
         fadePixel(column, row, off, orange, 30, 0);
       }
-
     }
   }
-} 
-
-
-
-
+}
 
 // Fill the dots one after the other with a color
 void animation(RGB color, uint8_t wait) {
@@ -178,7 +154,6 @@ void animation(RGB color, uint8_t wait) {
     }
   }
 }
-
 
 // Fill the dots one after the other with a color
 void colorWipe(RGB color, uint8_t wait) {
@@ -195,27 +170,13 @@ void colorWipe(RGB color, uint8_t wait) {
 void fadePixel(int x, int y, RGB startColor, RGB endColor, int steps, int wait) {
   for(int i = 0; i <= steps; i++) 
   {
-     int newR = startColor.r + (endColor.r - startColor.r) * i / steps;
-     int newG = startColor.g + (endColor.g - startColor.g) * i / steps;
-     int newB = startColor.b + (endColor.b - startColor.b) * i / steps;
-     
-     matrix.drawPixel(x, y, matrix.Color(newR, newG, newB));
-     matrix.show();
-     delay(wait);
-  }
-}
-
-// Crossfade entire screen from startColor to endColor
-void crossFade(RGB startColor, RGB endColor, int steps, int wait) {
-  for(int i = 0; i <= steps; i++)
-  {
-     int newR = startColor.r + (endColor.r - startColor.r) * i / steps;
-     int newG = startColor.g + (endColor.g - startColor.g) * i / steps;
-     int newB = startColor.b + (endColor.b - startColor.b) * i / steps;
-     
-     matrix.fillScreen(matrix.Color(newR, newG, newB));
-     matrix.show();
-     delay(wait);
+    int newR = startColor.r + (endColor.r - startColor.r) * i / steps;
+    int newG = startColor.g + (endColor.g - startColor.g) * i / steps;
+    int newB = startColor.b + (endColor.b - startColor.b) * i / steps;
+    
+    matrix.drawPixel(x, y, matrix.Color(newR, newG, newB));
+    matrix.show();
+    delay(wait);
   }
 }
 
@@ -235,5 +196,3 @@ void scrollText(String textToDisplay) {
     delay(150);
   }
 }
-
-
