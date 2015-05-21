@@ -10,9 +10,11 @@ This short program attempts to make use of a particle physics library
 #include <Adafruit_GFX.h>
 #include <Adafruit_NeoMatrix.h>
 #include "RGB.h"
+
 #include "ParticleSys.h"
-#include "Particle_Bounce.h"
-#include "Emitter_Spin.h"
+#include "Particle_Std.h"
+#include "Particle_Fixed.h"
+#include "Emitter_Fountain.h"
 #include "PartMatrix.h"
 
 #define PIN 1
@@ -22,38 +24,41 @@ Adafruit_NeoMatrix matrix = Adafruit_NeoMatrix(8, 8, PIN,
   NEO_MATRIX_ROWS + NEO_MATRIX_PROGRESSIVE,
   NEO_GRB            + NEO_KHZ800);
 
-// For particles setup?
-const byte numParticles = 60;
 
-Particle_Bounce particles[numParticles];
-Emitter_Spin emitter(112, 112, 5, 7);
+
+// For particles setup?
+
+const byte numParticles = 150;
+boolean pulseOn = false;
+
+Particle_Std particles[numParticles];
+Particle_Fixed source;
+Emitter_Fountain emitter(10, 0, 10, &source);
 ParticleSys pSys(numParticles, particles, &emitter);
 PartMatrix pMatrix;
 
-
-// Internal representation of the game
-int gameboard[3][3] = {
-  {0,0,0},
-  {0,0,0},
-  {0,0,0}
-};
-
 void setup() {
-  matrix.begin();
-  matrix.setBrightness(5);
-  matrix.setTextColor( matrix.Color(white.r, white.g, white.b) );
-  matrix.setTextWrap(false);
+  
+//Debug
+Serial.begin(9600);           // set up Serial library at 9600 bps
 
-  // // Title
-  // String ttt = "TicTacToe";
-  // scrollText(ttt);
+  matrix.begin();
+  matrix.setBrightness(100);
+
   randomSeed(analogRead(0));
   
-  pMatrix.reset();
-  PartMatrix::isOverflow = true;
-  
-  emitter.oscilate = true;
-  delay(500);
+   source.vx = 6;
+    //source.vy = 10;
+    
+    source.x = 100;
+    source.y = 0;
+    Emitter_Fountain::minLife = 1120;
+    Emitter_Fountain::maxLife = 1180;
+    Particle_Std::ay = 10;
+    //PartMatrix::isOverflow = false;
+
+    //init all pixels to zero
+    pMatrix.reset();
 }
 
 void loop() {
@@ -62,124 +67,27 @@ void loop() {
   
   pSys.update();
     drawMatrix();
-#if BOARD == 'c'    
-    Colorduino.FlipPage();
-#endif 
-    delay(30);
+
+    delay(80);
 }
 
 
 
 void drawMatrix(){
-    pMatrix.fade();
+    pMatrix.reset();
     pMatrix.render(particles, numParticles);
     //update the actual LED matrix
-    for (byte y=0;y<PS_PIXELS_Y;y++) {
-        for(byte x=0;x<PS_PIXELS_X;x++) {
-          matrix.drawPixel(x, y, matrix.Color(pMatrix.matrix[x][y].r, pMatrix.matrix[x][y].g, pMatrix.matrix[x][y].b));
+    for (byte y=0;y<8;y++) {
+        for(byte x=0;x<8;x++) {
 
+             matrix.drawPixel(x, y, matrix.Color(pMatrix.matrix[x][y].r, pMatrix.matrix[x][y].g, pMatrix.matrix[x][y].b));
 
-
-// #if BOARD == 'c'
-//             Colorduino.SetPixel(x, y, pMatrix.matrix[x][y].r, pMatrix.matrix[x][y].g, pMatrix.matrix[x][y].b);
-// #else
-//             Rb.setPixelXY(x, y, pMatrix.matrix[x][y].r, pMatrix.matrix[x][y].g, pMatrix.matrix[x][y].b);
-// #endif
-//         }
-//     }
-// }
-
-
-
-
-
-// Check for satisfaction of win condition
-int checkDisplayWin() {
-  // Check horizontal and verticals
-  for(uint16_t i=0; i < 3; i++) {
-    if(gameboard[i][0] > 0 &&   //
-      gameboard[i][0] == gameboard[i][1] && 
-      gameboard[i][0] == gameboard[i][2]) {
-        displaywin(gameboard[i][0]);
-        return 1;
-    } else if(gameboard[0][i] > 0 && 
-      gameboard[0][i] == gameboard[1][i] && 
-      gameboard[0][i] == gameboard[2][i]) {
-        displaywin(gameboard[0][i]);
-        return 1; 
-    }
-  }
-
-  // Check diagonals
-  if(gameboard[0][0] > 0 &&  
-    gameboard[0][0] == gameboard[1][1] && 
-    gameboard[0][0] == gameboard[2][2]) {
-      displaywin(gameboard[0][0]);
-      return 1; 
-  }else if(gameboard[0][2] > 0 && 
-    gameboard[0][2] == gameboard[1][1] && 
-    gameboard[1][1] == gameboard[2][0]) {
-      displaywin(gameboard[0][0]);
-      return 1; 
-  }
-  return 0; // Nope, keep playing
-}
-
-// Display winning text
-// TODO: add player info/animation
-void displaywin(int winner) {
-  delay(1000);
-  String winnertext = "Win!";
-  scrollText(winnertext);
-}
-
-//draw grid
-void drawGrid(){
-  // This 8x8 array represents the LED matrix pixels. 
-  // A value of 1 means we’ll fade the pixel to white
-  int logo[8][8] = {  
-   {0, 0, 1, 0, 0, 1, 0, 0},
-   {0, 0, 1, 0, 0, 1, 0, 0},
-   {1, 1, 1, 1, 1, 1, 1, 1},
-   {0, 0, 1, 0, 0, 1, 0, 0},
-   {0, 0, 1, 0, 0, 1, 0, 0},
-   {1, 1, 1, 1, 1, 1, 1, 1},
-   {0, 0, 1, 0, 0, 1, 0, 0},
-   {0, 0, 1, 0, 0, 1, 0, 0}
-  };
-   
-  for(int row = 0; row < 8; row++) {
-    for(int column = 0; column < 8; column++) {
-      if(logo[row][column] == 1) {
-        fadePixel(column, row, purple, white, 30, 0);
-      }
-    }
-  } 
-}
-
-// Display the chosen location
-void displayMove(int x, int y, int player){
-  for(int row = x*3; row < (x*3)+2; row++) {
-    for(int column = y*3; column < (y*3)+2; column++) {
-      if(player < 2) {
-        fadePixel(column, row, off, teal, 30, 0);
-      }else{
-        fadePixel(column, row, off, orange, 30, 0);
-      }
-    }
-  }
-}
-
-// Fill the dots one after the other with a color
-void animation(RGB color, uint8_t wait) {
-  for(uint16_t row=0; row < 8; row++) {
-    for(uint16_t column=0; column < 8; column++) {
-      matrix.drawPixel(column, row, matrix.Color(color.r, color.g, color.b));
       matrix.show();
-      delay(wait);
+
+        }
     }
-  }
 }
+
 
 // Fade pixel (x, y) from startColor to endColor
 void fadePixel(int x, int y, RGB startColor, RGB endColor, int steps, int wait) {
@@ -195,20 +103,3 @@ void fadePixel(int x, int y, RGB startColor, RGB endColor, int steps, int wait) 
   }
 }
 
-// Scroll text to the left
-void scrollText(String textToDisplay) {
-  int x = matrix.width();
-  int pixelsInText = textToDisplay.length() * 7;
-  
-  matrix.setCursor(x, 0);
-  matrix.print(textToDisplay);
-  matrix.show();
-  
-  while(x > (matrix.width() - pixelsInText)) {
-    matrix.fillScreen(matrix.Color(teal.r, teal.g, teal.b));
-    matrix.setCursor(--x, 0);
-    matrix.print(textToDisplay);
-    matrix.show();
-    delay(150);
-  }
-}
