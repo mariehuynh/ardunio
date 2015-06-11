@@ -32,6 +32,25 @@ Adafruit_NeoMatrix matrix = Adafruit_NeoMatrix(8, 8, 2, 2, PIN,
 
 // Internal representation of the game
 int univ[16][16] = {
+  {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+  {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+  {0,0,0,1,1,1,0,0,0,1,1,1,0,0,0,0},
+  {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+  {0,1,0,0,0,0,1,0,1,0,0,0,0,1,0,0},
+  {0,1,0,0,0,0,1,0,1,0,0,0,0,1,0,0},
+  {0,1,0,0,0,0,1,0,1,0,0,0,0,1,0,0},
+  {0,0,0,1,1,1,0,0,0,1,1,1,0,0,0,0},
+  {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+  {0,0,0,1,1,1,0,0,0,1,1,1,0,0,0,0},
+  {0,1,0,0,0,0,1,0,1,0,0,0,0,1,0,0},
+  {0,1,0,0,0,0,1,0,1,0,0,0,0,1,0,0},
+  {0,1,0,0,0,0,1,0,1,0,0,0,0,1,0,0},
+  {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+  {0,0,0,1,1,1,0,0,0,1,1,1,0,0,0,0},
+  {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}
+};
+
+int univ1[16][16] = {
   {0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
   {0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0},
   {1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0},
@@ -49,31 +68,30 @@ int univ[16][16] = {
   {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
   {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}
 };
-
-
 int next[16][16];
 
 
 int (*thisboard)[16] = univ;
 int (*nextboard)[16] = next;
 
-
-  #define for_x for (int x = 0; x < w; x++)
-#define for_y for (int y = 0; y < h; y++)
-#define for_xy for_x for_y
-
 void setup() {
   matrix.begin();
   matrix.setBrightness(10);
-  //matrix.setTextColor( matrix.Color(white.r, white.g, white.b) );
-  //matrix.setTextWrap(false);
 
   Serial.begin(9600);
 
-  delay(500);
+  // Generate random board
+  randomSeed(analogRead(0));
+  for(int i = 0; i < boardwidth; i++){
+    for(int j = 0; j < boardlength; j++){
+      if (random(0,10) <5)
+        univ[i][j] = 1;
+      else 
+        univ[i][j] = 0;  
+    }
+  }// Comment this loop out if you want the gliders or pulsar
+  
 }
-
-
 
 
 void loop() {
@@ -101,11 +119,7 @@ void loop() {
             n++;          
         }
       }
-//            Serial.print(i);
-//    Serial.print(",");
-//    Serial.print(j);
-//    Serial.print(":");
-//    Serial.println(n);
+
       // Take out the middle
       if(thisboard[i][j])
         n--;
@@ -119,5 +133,5 @@ void loop() {
   nextboard = thisboard;
   thisboard = temp; 
   
-    delay(20);
+    delay(90);
   }
