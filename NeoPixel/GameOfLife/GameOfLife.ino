@@ -12,6 +12,8 @@ This short program plays Conway's Game of Life on four 8x8 Adafruit NeoMatrices.
 
 RGB lowwhite = { 55, 55, 55 };
 RGB green = { 0, 255, 0 };
+RGB blue = { 0, 0, 255 };
+
 
 #define PIN 1
 
@@ -80,6 +82,7 @@ void setup() {
 
   Serial.begin(9600);
 
+  
   // Generate random board
   randomSeed(analogRead(0));
   for(int i = 0; i < boardwidth; i++){
@@ -91,6 +94,8 @@ void setup() {
     }
   }// Comment this loop out if you want the gliders or pulsar
   
+  
+  
 }
 
 
@@ -98,9 +103,14 @@ void loop() {
   // Display state
   for(int i = 0; i < boardwidth; i++){
     for(int j = 0; j < boardlength; j++){
-      if(thisboard[i][j])
+      if(thisboard[i][j] == 1)
+        matrix.drawPixel(i, j, matrix.Color(blue.r, blue.g, blue.b));
+
+      else if(thisboard[i][j] > 1)
         matrix.drawPixel(i, j, matrix.Color(white.r, white.g, white.b));
-      else 
+      else if(thisboard[i][j] < 1 && nextboard[i][j] > 0)
+        matrix.drawPixel(i, j, matrix.Color(255, 0, 0));
+        else
         matrix.drawPixel(i, j, matrix.Color(0, 0, 0));
     }
   }
@@ -123,8 +133,10 @@ void loop() {
       // Take out the middle
       if(thisboard[i][j])
         n--;
-      nextboard[i][j] = (n == 3 || (n == 2 && thisboard[i][j]));
-
+      if(n == 3 || (n == 2 && thisboard[i][j]))
+        nextboard[i][j] = 1 + thisboard[i][j];
+      else
+        nextboard[i][j] = 0;
     }
   }
   
@@ -133,5 +145,5 @@ void loop() {
   nextboard = thisboard;
   thisboard = temp; 
   
-    delay(90);
+    delay(530);
   }
