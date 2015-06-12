@@ -84,7 +84,7 @@ void setup() {
 
   
   // Generate random board
-  randomSeed(analogRead(0));
+  randomSeed(analogRead(4));
   for(int i = 0; i < boardwidth; i++){
     for(int j = 0; j < boardlength; j++){
       if (random(0,10) <5)
