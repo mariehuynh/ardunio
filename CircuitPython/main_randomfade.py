@@ -12,33 +12,20 @@ import adafruit_dotstar as dotstar
 from random import randint
 
 # One pixel connected internally!
-dot = dotstar.DotStar(board.APA102_SCK, board.APA102_MOSI, 1, brightness=1)
-
-# Built in red LED
-led = DigitalInOut(board.D13)
-led.direction = Direction.OUTPUT
-
-# Analog output on A0
-aout = AnalogOut(board.A0)
-
-# Analog input on A1
-analog1in = AnalogIn(board.A1)
-
-# Capacitive touch on A2
-touch2 = TouchIn(board.A2)
-
-# Used if we do HID output, see below
-kbd = Keyboard()
+dot = dotstar.DotStar(board.APA102_SCK, board.APA102_MOSI, 1, brightness=0.5)
 
 ######################### HELPERS ##############################
 
 def fade(color1, color2, steps):
 
     red, green, blue = color1
+
+    # calculate step increment for each color component 
     redupdate = (color2[0] - color1[0]) / steps
     greenupdate = (color2[1] - color1[1]) / steps
     blueupdate = (color2[2] - color1[2]) / steps
 
+    # move toward color2
     for i in range(steps):
         time.sleep(.1)
         red = red + redupdate
@@ -51,14 +38,12 @@ def fade(color1, color2, steps):
 
 ######################### MAIN LOOP ##############################
 
-i = 100
-j = 100
-k = 100
-dot[0] = [i, j, k]
+# start at a pretty blue-green
+dot[0] = [0, 200, 200]
 
 while True:
     # choose random new color
     newcolor = [randint(0, 255), randint(0, 255), randint(0, 255)]
-    # spin internal LED around!
-    #dot[0] = wheel(i)
+    
+    # fade to new color
     fade(dot[0], newcolor,40)
