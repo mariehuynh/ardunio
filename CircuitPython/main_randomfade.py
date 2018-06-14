@@ -1,13 +1,9 @@
+# Marie Huynh
 # Gemma M0 
 # Fades to random colors
 
 import board
 import time
-from digitalio import DigitalInOut, Direction, Pull
-from analogio import AnalogIn, AnalogOut
-from touchio import TouchIn
-from adafruit_hid.keyboard import Keyboard
-from adafruit_hid.keycode import Keycode
 import adafruit_dotstar as dotstar
 from random import randint
 
@@ -17,24 +13,27 @@ dot = dotstar.DotStar(board.APA102_SCK, board.APA102_MOSI, 1, brightness=0.5)
 ######################### HELPERS ##############################
 
 def fade(color1, color2, steps):
-
+    # start at color1
     red, green, blue = color1
 
     # calculate step increment for each color component 
-    redupdate = (color2[0] - color1[0]) / steps
-    greenupdate = (color2[1] - color1[1]) / steps
-    blueupdate = (color2[2] - color1[2]) / steps
+    redstep   = (color2[0] - color1[0]) / steps
+    greenstep = (color2[1] - color1[1]) / steps
+    bluestep  = (color2[2] - color1[2]) / steps
 
     # move toward color2
     for i in range(steps):
-        time.sleep(.1)
-        red = red + redupdate
-        green = green + greenupdate
-        blue = blue + blueupdate
-
+        # not too fast
+        time.sleep(.05)
+        
+        # calculate next step's color
+        red = red + redstep
+        green = green + greenstep
+        blue = blue + bluestep
         dot[0] = [int(red), int(green), int(blue)]
+        
+        # update LED
         dot.show()
-        print(str(i) + ":" + str(dot[0]))
 
 ######################### MAIN LOOP ##############################
 
