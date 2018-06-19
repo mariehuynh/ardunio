@@ -2,7 +2,7 @@
 # External NeoPixel with Brightness Control
 # Runs on Circuit Playground Express + 24 NeoPixel ring + potentiometer
 
-# Note: Gemma M0 uses D1 but Circuit Playground Express uses A1
+# Note: Gemma M0 uses D1 but Circuit Playground Express uses A1 for NeoPixels
 
 import time
 import board
