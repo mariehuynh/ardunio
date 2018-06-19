@@ -35,11 +35,11 @@ def rainbow_cycle(wait, speed):
             pixels[i] = wheel(rc_index & 255)
         pixels.show()
         time.sleep(wait)
-        adjust_brightness() # much better response time here than in main loop
+        adjust_brightness()  # much better response time here than in main loop
 
 def adjust_brightness():
     pixels.brightness = pot_pin.value/65536
-    # print((pixels.brightness,)) # print for plotter
+    # print((pixels.brightness,))  # print for plotter
     
 while True:
     rainbow_cycle(0, 10)
