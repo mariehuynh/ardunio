@@ -143,20 +143,10 @@ def read16(address):
         return (result[0] << 8) | result[1]
 
 
-def write8( address, data):
+def write8(address, data):
     with device:
         device.write(bytes([address, data])) 
 
-
-def readregister(register):
-    result = bytearray(REGISTER_SIZE)
-        
-    i2c.writeto(device, bytes([register]))
-    i2c.readfrom_into(device, result)
-    
-    print('Address {0}: {1}'.format(hex(register), ' '.join([hex(x) for x in result])))
-    
-    
 def writeParam(p, v):
     write8(SI1145_REG_PARAMWR, v)
     write8(SI1145_REG_COMMAND, p | SI1145_PARAM_SET)
@@ -195,7 +185,7 @@ def load_calibration():
     # /****************************** Prox Sense 1 */
 
     # Program LED current
-    write8(SI1145_REG_PSLED21, 0x03) # 20mA for LED 1 only
+    write8(SI1145_REG_PSLED21, 0x03)  # 20mA for LED 1 only
     writeParam(SI1145_PARAM_PS1ADCMUX, SI1145_PARAM_ADCMUX_LARGEIR)
 
     # Prox sensor #1 uses LED #1
@@ -230,20 +220,20 @@ def load_calibration():
     writeParam(SI1145_PARAM_ALSVISADCMISC, SI1145_PARAM_ALSVISADCMISC_VISRANGE)
 
     # measurement rate for auto
-    write8(SI1145_REG_MEASRATE0, 0xFF) # 255 * 31.25uS = 8ms
+    write8(SI1145_REG_MEASRATE0, 0xFF)  # 255 * 31.25uS = 8ms
 
     # auto run
     write8(SI1145_REG_COMMAND, SI1145_PSALS_AUTO)
 
 
 def readUV():
-	return read16(0x2C)
+    return read16(0x2C)
 
-#returns visible + IR light levels
+# returns visible + IR light levels
 def readVisible():
     return read16(0x22)
 
-#returns IR light levels
+# returns IR light levels
 def readIR():
     return read16(0x24)
 
@@ -259,12 +249,10 @@ reset()
 load_calibration()
 
 while 1:
-	print("readuv")
-	print(readUV())
-	print("readvisible")
-	print((readVisible(),))
-	#print("readIR")
-	#print(readIR())
-	#print("readProx")
-	#print(readProx())
-	time.sleep(2)
+    print("readuv")
+    averageUV = (readUV() + readUV() + readUV())/3
+    print(averageUV)
+    print("readvisible")
+    averageVis = (readVisible() + readVisible() + readVisible())/3
+    print((averageVis,))
+    time.sleep(2)
