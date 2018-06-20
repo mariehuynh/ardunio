@@ -1,3 +1,11 @@
+# Marie Huynh
+#
+# Written for Adafruit Gemma M0 + Flora UV Index Sensor (Si1145 Light Sensor)
+#
+# This was cobbled together based on some Adafruit tutorials and  
+# the Raspberry Pi port at https://github.com/THP-JOE/Python_SI1145
+
+
 import board
 import busio
 from adafruit_bus_device.i2c_device import I2CDevice
