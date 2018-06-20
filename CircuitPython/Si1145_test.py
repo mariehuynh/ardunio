@@ -3,10 +3,8 @@ import busio
 from adafruit_bus_device.i2c_device import I2CDevice
 import time
 
-REGISTERS = (0, 256)  # Range of registers to read, from the first up to (but
-                      # not including!) the second value.
-
 REGISTER_SIZE = 2     # Number of bytes to read from each register.
+
 # COMMANDS
 SI1145_PARAM_QUERY                      = 0x80
 SI1145_PARAM_SET                        = 0xA0
@@ -76,8 +74,6 @@ SI1145_PARAM_ADCCOUNTER_511CLK          = 0x70
 SI1145_PARAM_ADCMUX_SMALLIR             = 0x00
 SI1145_PARAM_ADCMUX_LARGEIR             = 0x03
 
-
-
 # REGISTERS
 SI1145_REG_PARTID                       = 0x00
 SI1145_REG_REVID                        = 0x01
@@ -92,7 +88,6 @@ SI1145_REG_IRQEN_ALSEVERYSAMPLE         = 0x01
 SI1145_REG_IRQEN_PS1EVERYSAMPLE         = 0x04
 SI1145_REG_IRQEN_PS2EVERYSAMPLE         = 0x08
 SI1145_REG_IRQEN_PS3EVERYSAMPLE         = 0x10
-
 
 SI1145_REG_IRQMODE1                     = 0x05
 SI1145_REG_IRQMODE2                     = 0x06
@@ -131,28 +126,16 @@ SI1145_REG_CHIPSTAT                     = 0x30
 # I2C Address
 SI1145_ADDR                             = 0x60
 
-
 def read8(address):
-    # Read and return a byte from the specified 16-bit register address.
     with device:
-        device.write(bytes([(address >> 8) & 0xFF,
-                             address & 0xFF]),
-                             stop=False)
-        #device.write(bytes([address]), stop=False)
+        device.write(bytes([address]), stop=False)
         result = bytearray(1)
         device.readinto(result)
-        print("read8")
-        print(result)
         return result[0]
 
 def read16(address):
-    # Read and return a 16-bit unsigned big endian value read from the
-    # specified 16-bit register address.
     with device:
-        device.write(bytes([(address >> 8) & 0xFF,
-                             address & 0xFF]),
-                             stop=False)
-        #device.write(bytes([address]), stop=False)
+        device.write(bytes([address]), stop=False)
         result = bytearray(2)
         device.readinto(result)
         print('read16: {}'.format(hex(address)))
@@ -161,11 +144,8 @@ def read16(address):
 
 
 def write8( address, data):
-    # Write 1 byte of data from the specified 16-bit register address.
     with device:
-        device.write(bytes([(address >> 8) & 0xFF,
-                             address & 0xFF,
-                             data])) 
+        device.write(bytes([address, data])) 
 
 
 def readregister(register):
@@ -195,6 +175,7 @@ def reset():
     time.sleep(.01)
     write8(SI1145_REG_HWKEY, 0x17)
     time.sleep(.01)
+
 def load_calibration():
     # /***********************************/
     # Enable UVindex measurement coefficients!
@@ -272,45 +253,18 @@ def readProx():
 
 # Initialize and lock the I2C bus.
 i2c = busio.I2C(board.SCL, board.SDA)
-#while not i2c.try_lock():
-#    pass
-
-# Find the first I2C device available.
-#devices = i2c.scan()
-#while len(devices) < 1:
-#    devices = i2c.scan()
-#device = devices[0]
-
-#print('Found device with address: {}'.format(hex(device)))
-
-# Assuming the first one found is the only one attached and is the UV sensor!
-
-
-#readregister(0x2C)
 
 device = I2CDevice(i2c, 0x60)
 reset()
 load_calibration()
 
-#with device:
-#     device.write(bytes([0x2C]), stop=False)
-#     result = bytearray(2)
-#     device.readinto(result)
-#     print(result)
-
-#while 1:
-print("readuv")
-print(readUV())
-print("readvisible")
-print(readVisible())
-print("readIR")
-print(readIR())
-print("readProx")
-print(readProx())
-#time.sleep(1)
-
-#i2c.writeto(device, bytes([0x2C]))
-#i2c.readfrom_into(device, result)
-#print('UV Address {0}: {1}'.format(hex(0x2C), ' '.join([hex(x) for x in result])))
-# Unlock the I2C bus when finished.  Ideally put this in a try-finally!
-i2c.unlock()
+while 1:
+	print("readuv")
+	print(readUV())
+	print("readvisible")
+	print((readVisible(),))
+	#print("readIR")
+	#print(readIR())
+	#print("readProx")
+	#print(readProx())
+	time.sleep(2)
