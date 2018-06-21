@@ -146,8 +146,8 @@ def read16(address):
         device.write(bytes([address]), stop=False)
         result = bytearray(2)
         device.readinto(result)
-        print('read16: {}'.format(hex(address)))
-        print(result)
+        #print('read16: {}'.format(hex(address)))
+        #print(result)
         return (result[0] << 8) | result[1]
 
 
@@ -257,10 +257,11 @@ reset()
 load_calibration()
 
 while 1:
-    print("readuv")
-    averageUV = (readUV() + readUV() + readUV())/3
+    print("=================================")
+    print("average UV Index:")
+    averageUV = (readUV() + readUV() + readUV())/30000
     print(averageUV)
-    print("readvisible")
+    print("average visible:")
     averageVis = (readVisible() + readVisible() + readVisible())/3
     print((averageVis,))
     time.sleep(2)
