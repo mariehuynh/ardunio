@@ -1,7 +1,8 @@
 /*********************************************************************
-This is an example for our Monochrome OLEDs based on SSD1306 drivers
+Marie Huynh
 
-128x32 size display using I2C to communicate
+This uses a Monochrome OLED and UV sensor to tell you if you should 
+hide from high UV levels.  It also runs on the Gemma M0.
 
 This is based on libraries from Adafruit.  Check them out here:
 https://learn.adafruit.com/adafruit-gfx-graphics-library
@@ -16,20 +17,16 @@ https://learn.adafruit.com/adafruit-gfx-graphics-library
 #include <Adafruit_GFX.h>
 #include <Fonts/FreeMonoBoldOblique9pt7b.h>
 
-
 #include "Adafruit_SI1145.h"
 Adafruit_SI1145 uv = Adafruit_SI1145();
 
 #define OLED_RESET 4
 Adafruit_SSD1306 display(OLED_RESET);
 
-
 float UVindex;
 int toggle = 0;
 
 void setup()   {                
-  //Serial.begin(9600);
-
 
   // by default, we'll generate the high voltage from the 3.3v line internally! (neat!)
   display.begin(SSD1306_SWITCHCAPVCC, 0x3C);  // initialize with the I2C addr 0x3C (for the 128x32)
@@ -46,19 +43,14 @@ void setup()   {
   display.print("Setting up");
   display.display();
 
-  
-  Serial.begin(9600);
-  Serial.println("Adafruit SI1145 test");
-  
-    delay(1000);
+  Serial.begin(9600);  
+  delay(1000);
 
   while (! uv.begin()) {
     Serial.println("Didn't find Si1145");
-    //while (1);
   }
   Serial.println("OK!");
 }
-
 
 void loop() {
   
@@ -73,6 +65,7 @@ void loop() {
   display.print(UVindex);
   Serial.println(UVindex);
 
+  // Toggle makes it blink
   if (toggle? toggle=0 : toggle=1) {
     if(UVindex < 2) {
       display.println("      Yay!");
@@ -80,6 +73,7 @@ void loop() {
       display.println("      Hide!");
     }
   }
+  
   // Actually write to display
   display.display();
   
